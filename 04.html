@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+        margin:0;
+        padding: 0;
+        }
+        li{
+            list-style:none;
+        }
+        li span{
+            padding-left: 20px;
+            cursor: pointer;
+            background: url("../images/add.png") no-repeat center left;
+        }
+        li ul{
+            display: none; 
+        }
+        .open{ 
+            background: url("../images/minus.png") no-repeat center left; 
+        }
+        .open+ul{ 
+            display: block; 
+        }
+
+        #tab li{
+            float: left; list-style: none;
+        }
+        #tab li a{
+            display:inline-block;
+            text-decoration:none;
+            width: 80px; height: 40px;
+            line-height: 40px;
+            text-align: center;
+            color:#000;
+        }
+        #container{
+            position: relative;
+        }
+        #content1,#content2,#content3{
+            width: 300px;
+            height: 100px;
+            padding:30px;
+            position: absolute;
+            top: 40px;
+            left: 0;
+        }
+        #tab li:first-child,#content1{
+            background-color: #ffcc00;
+        }
+        #tab li:first-child+li,#content2{
+            background-color: #ff00cc;
+        }
+        #tab li:first-child+li+li,#content3{
+            background-color: #00ccff;
+        }
+    </style>
+</head>
+<body>
+    <ul class="tree">
+		<li>
+			<span class="open">考勤管理</span>
+			<ul>
+				<li>日常考勤</li>
+				<li>请假申请</li>
+				<li>加班/出差</li>
+			</ul>
+		</li>
+		<li>
+			<span>信息中心</span>
+			<ul>
+				<li>通知公告</li>
+				<li>公司新闻</li>
+				<li>规章制度</li>
+			</ul>
+		</li>
+		<li>
+			<span>协同办公</span>
+			<ul>
+				<li>公文流转</li>
+				<li>文件中心</li>
+				<li>内部邮件</li>
+				<li>即时通信</li>
+				<li>短信提醒</li>
+			</ul>
+		</li>
+    </ul>
+    
+    <h2>管理员列表</h2>
+	<table border="1px" width="500px">
+	  <thead>
+		<tr>
+			<th><input type="checkbox"/>全选</th>
+			<th>管理员ID</th>
+			<th>姓名</th>
+			<th>操作</th>
+		</tr>
+	  </thead>
+	  <tbody>
+	  	<tr>
+	  		<td><input type="checkbox"/></td>
+	  		<td>1</td>
+	  		<td>Tester</td>
+	  		<td>修改 删除</td>
+	  	</tr>
+	  	<tr>
+	  		<td><input type="checkbox"/></td>
+	  		<td>2</td>
+	  		<td>Manager</td>
+	  		<td>修改 删除</td>
+	  	</tr>
+	  	<tr>
+	  		<td><input type="checkbox"/></td>
+	  		<td>3</td>
+	  		<td>Analyst</td>
+	  		<td>修改 删除</td>
+	  	</tr>
+	  	<tr>
+	  		<td><input type="checkbox"/></td>
+	  		<td>4</td>
+	  		<td>Admin</td>
+	  		<td>修改 删除</td>
+	  	</tr>
+	  </tbody>
+	</table>
+    <button>删除选定</button>
+    
+
+    <h2>实现多标签页效果</h2>
+    <div class="tabs">
+        <ul id="tab">
+            <li><a href="#content1" data-click="tab" data-divid="content1">10元套餐</a></li>
+            <li><a href="#content2" data-click="tab" data-divid="content2">30元套餐</a></li>
+            <li><a href="#content3" data-click="tab" data-divid="content3">50元包月</a></li>
+        </ul>
+        <div id="container">
+            <div id="content1">
+                10元套餐详情：<br />&nbsp;每月套餐内拨打100分钟，超出部分2毛/分钟
+            </div>
+            <div id="content2">
+                30元套餐详情：<br />&nbsp;每月套餐内拨打300分钟，超出部分1.5毛/分钟
+            </div>
+            <div id="content3">
+                50元包月详情：<br />&nbsp;每月无限量随心打
+            </div>
+        </div>
+    </div>
+    <script>
+        var spans=document.querySelectorAll("ul.tree>li>span");
+
+        for(var span of spans){
+            span.onclick=function(){
+                if(this.className=="open"){
+                    this.className="";
+                }else{
+                    var openSpan=document.querySelector("ul.tree>li>span.open");
+                    if(openSpan!=null){
+                        openSpan.className="";
+                    }
+                    this.className="open";
+                }
+            }
+        }
+
+
+        var chbAll=document.querySelector("thead>tr>th:first-child>input");
+        chbAll.onclick=function(){
+            var chbs=document.querySelectorAll("tbody>tr>td:first-child>input");
+            for(var chb of chbs){
+                chb.checked=this.checked;
+            }
+        }
+
+        var chbs=document.querySelectorAll("tbody>tr>td:first-child>input");
+        for(var chb of chbs){
+            chb.onclick=function(){
+                var chbAll=document.querySelector("thead>tr>th:first-child>input");
+                //尝试在tbody中查找一个未选中的checkbox
+                var unchecked=document.querySelector("tbody>tr>td:first-child>input:not(:checked)");
+
+                //如果找到了这样一个checkbox，则chbAll不选中。
+                if(unchecked!=null){
+                    chbAll.checked=false;
+                }else{
+                    chbAll.checked=true;
+                }
+            }
+        }
+
+
+        var tabs=document.querySelectorAll("[data-click=tab]");
+        i=100;
+        for(var tab of tabs){
+            tab.onclick=function(){
+                //从当前按钮自己身上的data-divid属性中取出对一个div的id名
+                var divid=this.getAttribute("data-divid");
+
+                //拿到的divid，查找对应的div元素对象
+                var  div=document.getElementById(divid);
+                //修改当前按钮对应的div的zIndex值最大！就可以让当前按钮对应div到最上方来，挡住其它div
+                div.style.zIndex=i;
+                i++;
+            }
+        }
+
+    </script>
+</body>
+</html>
